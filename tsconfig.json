@@ -12,6 +12,10 @@
     "baseUrl": "./",
     "paths": {
       "@enviroment/*": ["src/enviroment/*"],
+      "@api/*": ["src/api/*"],
+      "@business/*": ["src/business/*"],
+      "@domain/*": ["src/domain/*"],
+      "@infrasctructure/*": ["src/infrasctructure/*"],
     },
     "incremental": true,
     "skipLibCheck": true,

@@ -1,8 +1,8 @@
 import z from 'zod';
 
 export const envSchema = z.object({
-  NODE_ENV: z.string().default('development'),
-  APP_PORT: z.string().default('3333'),
+  NODE_ENV: z.string(),
+  APP_PORT: z.string(),
 });
 
 export type EnvTypes = z.infer<typeof envSchema>;
