@@ -6,6 +6,10 @@ import { randomUUID } from 'node:crypto';
 export class TraceService {
   private storage = new AsyncLocalStorage<Map<string, string>>();
 
+  constructor() {
+    this.storage.enterWith(new Map<string, string>());
+  }
+
   getTraceId(): string {
     return this.storage.getStore()?.get('traceId') || randomUUID();
   }
@@ -13,6 +17,7 @@ export class TraceService {
   setTraceId(traceId: string): void {
     const store = this.storage.getStore() || new Map<string, string>();
     store.set('traceId', traceId);
+
     this.storage.enterWith(store);
   }
 }

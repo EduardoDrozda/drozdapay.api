@@ -4,28 +4,32 @@ import { TraceService } from '../tracing';
 
 @Injectable()
 export class LoggerWrapperService implements ILoggerWrapper {
-  private readonly logger = new ConsoleLogger({
-    timestamp: true,
-    json: true,
-  });
+  private readonly logger: ConsoleLogger;
 
   private traceId: string;
 
-  constructor(private readonly trace: TraceService) {
-    this.traceId = this.trace.getTraceId();
+  constructor(
+    private readonly trace: TraceService,
+  ) {
+    this.logger = new ConsoleLogger({
+      json: true,
+      colors: true,
+      compact: true,
+    });
   }
 
-  logInfo(message: string, context?: string): void {
-    this.logger.log(this.buildMessage(message), context);
+  logInfo(message: string): void {
+    this.logger.log(this.buildMessage(message));
   }
-  logError(message: string, context?: string): void {
-    this.logger.error(this.buildMessage(message), context);
+  logError(message: string): void {
+    this.logger.error(this.buildMessage(message));
   }
-  logWarning(message: string, context?: string): void {
-    this.logger.warn(this.buildMessage(message), context);
+  logWarning(message: string): void {
+    this.logger.warn(this.buildMessage(message));
   }
 
   private buildMessage(message: string): string {
-    return `[${this.traceId}] - ${message}`;
+    this.traceId = this.trace.getTraceId();
+    return `${this.traceId} - ${message}`;
   }
 }

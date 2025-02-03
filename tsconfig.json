@@ -16,6 +16,7 @@
       "@business/*": ["src/business/*"],
       "@domain/*": ["src/domain/*"],
       "@infrasctructure/*": ["src/infrasctructure/*"],
+      "@shared/*": ["src/shared/*"],
     },
     "incremental": true,
     "skipLibCheck": true,
