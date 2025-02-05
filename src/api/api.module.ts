@@ -5,10 +5,13 @@ import {
   BaseRequestInterceptor,
   BaseResponseInterceptor,
 } from 'src/infrastructure/interceptors';
+import { UserController } from './controllers/user';
+import { UseCaseModule } from '@business/use-cases/use-case.module';
+import { InfrastructureModule } from 'src/infrastructure/infrastructure.module';
 
-@Global()
 @Module({
-  controllers: [PencilController],
+  imports: [UseCaseModule, InfrastructureModule],
+  controllers: [PencilController, UserController],
   providers: [
     {
       provide: APP_INTERCEPTOR,

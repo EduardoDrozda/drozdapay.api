@@ -1,5 +1,6 @@
-import { CallHandler, ExecutionContext, Inject, Injectable, NestInterceptor } from '@nestjs/common';
+import { CallHandler, ExecutionContext, HttpStatus, Inject, Injectable, NestInterceptor } from '@nestjs/common';
 import { IBaseResponse } from '@shared/interfaces/base-response';
+import { Response } from 'express';
 import { map, Observable } from 'rxjs';
 import { INotification, NOTIFICATION_SERVICE } from 'src/infrastructure/notification';
 
@@ -10,6 +11,7 @@ export class BaseResponseInterceptor implements NestInterceptor {
 
   intercept(context: ExecutionContext, next: CallHandler<any>): Observable<any> | Promise<Observable<any>> {
       const url = context.switchToHttp().getRequest().url as string;
+      const response = context.switchToHttp().getResponse() as Response;
   
       if (url.startsWith('/health')) {
         return next.handle();
@@ -18,6 +20,8 @@ export class BaseResponseInterceptor implements NestInterceptor {
       return next.handle().pipe(
         map((data) => {
           if (this.notification.hasNotification) {
+            response.status(this.notification.getMessages()?.statusCode || HttpStatus.INTERNAL_SERVER_ERROR);
+            
             return {
               error: true,
               errorMessages: this.notification.getMessages(),
