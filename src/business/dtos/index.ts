@@ -1,2 +1,2 @@
-export * from './pencil';
+export * from './auth';
 export * from './user';

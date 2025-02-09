@@ -4,9 +4,10 @@ import { LOGGER_SERVICE, LoggerWrapperService } from './logging';
 import { NOTIFICATION_SERVICE, NotificationService } from './notification';
 import { RepositoriesModule } from './repositories';
 import { HashModule } from './hash/hash.module';
+import { AuthenticationModule } from './authentication';
 
 @Module({
-  imports: [RepositoriesModule, HashModule],
+  imports: [RepositoriesModule, HashModule, AuthenticationModule],
   providers: [
     TraceService,
     {
@@ -21,6 +22,7 @@ import { HashModule } from './hash/hash.module';
   exports: [
     RepositoriesModule,
     HashModule,
+    AuthenticationModule,
     TraceService,
     LOGGER_SERVICE,
     NOTIFICATION_SERVICE,

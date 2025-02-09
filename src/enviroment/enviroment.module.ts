@@ -16,6 +16,6 @@ import { EnviromentService } from './enviroment.service';
     provide: ENVIROMENT_SERVICE,
     useClass: EnviromentService,
   }],
-  exports: [ConfigModule],
+  exports: [ConfigModule, ENVIROMENT_SERVICE],
 })
 export class EnviromentModule {}

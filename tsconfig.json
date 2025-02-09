@@ -15,7 +15,7 @@
       "@api/*": ["src/api/*"],
       "@business/*": ["src/business/*"],
       "@domain/*": ["src/domain/*"],
-      "@infrasctructure/*": ["src/infrasctructure/*"],
+      "@infrastructure/*": ["src/infrastructure/*"],
       "@shared/*": ["src/shared/*"],
     },
     "incremental": true,

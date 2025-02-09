@@ -6,6 +6,7 @@ import {
 import { Inject, Injectable } from '@nestjs/common';
 import { HASH_SERVICE, IHashService } from 'src/infrastructure/hash';
 import { ILoggerWrapper, LOGGER_SERVICE } from 'src/infrastructure/logging';
+
 import {
   INotification,
   NOTIFICATION_SERVICE,
@@ -21,7 +22,7 @@ export class CreateUserUseCase {
     @Inject(HASH_SERVICE) private readonly hashService: IHashService,
   ) {}
 
-  async execute(data: CreateUserDTO) {
+  async execute(data: CreateUserDTO): Promise<void> {
     this.logger.logInfo(`${this.constructor.name} - Executing...`);
 
     const findedUser = await this.userRepository.findByEmail(data.email);
@@ -37,8 +38,6 @@ export class CreateUserUseCase {
       password: await this.hashService.hash(data.password),
     };
 
-    const user = await this.userRepository.create(newUser);
-
-    return user;
+    await this.userRepository.create(newUser);
   }
 }

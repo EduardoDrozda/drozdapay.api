@@ -24,6 +24,7 @@
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.0",
     "@nestjs/core": "^11.0.1",
+    "@nestjs/jwt": "^11.0.0",
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/swagger": "^11.0.3",
     "async_hooks": "^1.0.0",
@@ -80,6 +81,14 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "moduleNameMapper": {
+      "@api/(.*)": "<rootDir>/api/$1",
+      "@business/(.*)": "<rootDir>/business/$1",
+      "@domain/(.*)": "<rootDir>/domain/$1",
+      "@enviroment/(.*)": "<rootDir>/enviroment/$1",
+      "@infrastructure/(.*)": "<rootDir>/infrastructure/$1",
+      "@shared/(.*)": "<rootDir>/shared/$1"
+    }
   }
 }
