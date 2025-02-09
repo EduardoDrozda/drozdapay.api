@@ -49,6 +49,6 @@ export class CreateAuthenticationUseCase {
       username: user.email,
     });
 
-    return { accessToken: result };
+    return { accessToken: result, type: 'Bearer' };
   }
 }

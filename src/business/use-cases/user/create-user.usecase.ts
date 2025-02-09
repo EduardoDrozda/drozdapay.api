@@ -23,7 +23,7 @@ export class CreateUserUseCase {
   ) {}
 
   async execute(data: CreateUserDTO): Promise<void> {
-    this.logger.logInfo(`${this.constructor.name} - Executing...`);
+    this.logger.logInfo(`${this.constructor.name} - Executing with user: ${data.email}`);
 
     const findedUser = await this.userRepository.findByEmail(data.email);
 

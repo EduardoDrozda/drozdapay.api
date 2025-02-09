@@ -10,10 +10,11 @@ import { UseCaseModule } from '@business/use-cases/use-case.module';
 import { InfrastructureModule } from 'src/infrastructure/infrastructure.module';
 import { AuthGuard } from '@infrastructure/authentication';
 import { RequestExceptionFilter } from '@infrastructure/filters/exception';
+import { CategoryBillController } from './controllers/category-bill';
 
 @Module({
   imports: [UseCaseModule, InfrastructureModule],
-  controllers: [UserController, AuthController],
+  controllers: [UserController, AuthController, CategoryBillController],
   providers: [
     {
       provide: APP_INTERCEPTOR,

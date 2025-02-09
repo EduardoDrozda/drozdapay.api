@@ -1,5 +1,6 @@
 import { CreateUserDTO } from '@business/dtos';
 import { CreateUserUseCase } from '@business/use-cases/user/create-user.usecase';
+import { IsPublic } from '@infrastructure/authentication';
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 
@@ -7,6 +8,7 @@ import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 export class UserController {
   constructor(private readonly createUserUseCase: CreateUserUseCase) {}
 
+  @IsPublic()
   @Post()
   @ApiOperation({
     summary: 'Create a user',
@@ -22,12 +24,12 @@ export class UserController {
     },
   })
   @ApiResponse({
-    status: 201,
+    status: HttpStatus.CREATED,
     description: 'The user has been successfully created',
     type: CreateUserDTO,
   })
   @ApiResponse({
-    status: 409,
+    status: HttpStatus.CONFLICT,
     description: 'The user already exists',
   })
   @HttpCode(HttpStatus.CREATED)
