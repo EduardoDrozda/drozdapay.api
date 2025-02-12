@@ -1,4 +1,6 @@
 import { CreateBillDTO, GetBillDTO } from '@business/dtos';
+import { BillCreateInput } from '@domain/entities';
+import { BillPaymentCreateInput } from '@domain/entities/iBill-payment.entity';
 import {
   BILL_REPOSITORY,
   CATEGORY_BILL_REPOSITORY,
@@ -11,6 +13,7 @@ import {
   NOTIFICATION_SERVICE,
 } from '@infrastructure/notification';
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { DateHelper } from '@shared/helpers';
 
 @Injectable()
 export class CreateBillUseCase {
@@ -24,7 +27,7 @@ export class CreateBillUseCase {
     private readonly categoryBillRepository: ICategoryBillRepository,
   ) {}
 
-  async execute(data: CreateBillDTO): Promise<GetBillDTO | void> {
+  async execute(data: CreateBillDTO): Promise<any | void> {
     this.logger.logInfo(
       `${this.constructor.name} - Executing to: ${JSON.stringify(data)} `,
     );
@@ -41,6 +44,37 @@ export class CreateBillUseCase {
       return;
     }
 
-    return this.billRepository.create(data);
+    const bill: BillCreateInput = {
+      ...data,
+      bill_payments: this.createBillInstallments(data),
+    };
+
+    return this.billRepository.create(bill);
+  }
+
+  private createBillInstallments(
+    data: CreateBillDTO,
+  ): BillPaymentCreateInput[] {
+    const { installments, installments_type } = data;
+    const installs: BillPaymentCreateInput[] = [];
+
+    const quantity_installments = installments || 1;
+    const valuePerInstallment = data.total_value / quantity_installments;
+    const payment_frequency = installments_type || 'monthly';
+
+    for (let i = 0; i < quantity_installments; i++) {
+      const intallment = i + 1;
+      const installment: BillPaymentCreateInput = {
+        installment: intallment,
+        user_id: data.user_id,
+        value: valuePerInstallment.toFixed(2),
+        due_date: DateHelper.addDate(new Date(), intallment, payment_frequency),
+        payment_date: undefined,
+      };
+
+      installs.push(installment);
+    }
+
+    return installs;
   }
 }

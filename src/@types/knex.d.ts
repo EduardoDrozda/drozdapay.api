@@ -25,10 +25,21 @@ declare module 'knex/types/tables' {
       category_bills_id: string;
       name: string;
       description: string;
-      totalValue: number;
+      total_value: number;
       installments: number;
       installments_type: 'daily' | 'weekly' | 'monthly' | 'yearly';
       is_paid: boolean;
+      created_at: Date;
+      updated_at: Date;
+    };
+    bill_payments: {
+      id: string;
+      bill_id: string;
+      user_id: string;
+      installment: number;
+      value: string;
+      due_date: Date;
+      payment_date: Date;
       created_at: Date;
       updated_at: Date;
     };

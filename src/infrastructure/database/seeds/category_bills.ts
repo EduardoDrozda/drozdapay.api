@@ -44,5 +44,13 @@ export async function seed(knex: Knex): Promise<void> {
       color: '#33FFA1',
       icon: 'health-icon',
     },
+    {
+      id: '123e4567-e89b-12d3-a456-426614174005',
+      name: 'Moradia',
+      description:
+        'Gastos com moradia, incluindo aluguel, condomínio e contas de água e luz, eletrodomésticos',
+      color: '#FF5733',
+      icon: 'housing-icon',
+    }
   ]);
 }

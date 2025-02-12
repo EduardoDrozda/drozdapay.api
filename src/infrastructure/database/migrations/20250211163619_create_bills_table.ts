@@ -8,10 +8,10 @@ export async function up(knex: Knex): Promise<void> {
     table.string('name').notNullable();
     table.string('description');
 
-    table.decimal('totalValue').notNullable();
+    table.decimal('total_value').notNullable();
 
     table.decimal('installments').notNullable().defaultTo(1);
-    table.enum('installments_type', ['daily', 'weekly', 'monthly', 'yearly']);
+    table.enum('installments_type', ['daily', 'weekly', 'monthly', 'yearly']).defaultTo('monthly');
 
     table.uuid('user_id').notNullable();
 

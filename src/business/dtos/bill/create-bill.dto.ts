@@ -21,19 +21,19 @@ export class CreateBillDTO {
   @IsNotEmpty()
   @IsNumber()
   @ApiProperty({ example: 150.75 })
-  totalValue: number;
+  total_value: number;
 
   @IsNotEmpty()
   @IsNumber()
   @ApiProperty({ example: 5 })
   @IsOptional()
-  installments: number;
+  installments: number = 1;
 
   @IsNotEmpty()
   @IsString()
   @IsOptional()
   @ApiProperty({ example: 'monthly', required: false })
-  installmentsType?: 'daily' | 'weekly' | 'monthly' | 'yearly';
+  installments_type: 'daily' | 'weekly' | 'monthly' | 'yearly' = 'monthly';
 
   @IsBoolean()
   @IsOptional()

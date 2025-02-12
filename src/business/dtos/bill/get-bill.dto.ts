@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { GetBillPaymentDTO } from './get-bill-payment.dto';
 
 export class GetBillDTO {
   @ApiProperty({ example: '123e4567-e89b-12d3-a456-426614174000' })
@@ -8,7 +9,7 @@ export class GetBillDTO {
   name: string;
 
   @ApiProperty({ example: 150.75 })
-  totalValue: number;
+  total_value: number;
 
   @ApiProperty({ example: false })
   is_paid: boolean;
@@ -20,7 +21,7 @@ export class GetBillDTO {
   installments: number;
 
   @ApiProperty({ example: 'monthly' })
-  installmentsType?: 'daily' | 'weekly' | 'monthly' | 'yearly';
+  installments_type?: 'daily' | 'weekly' | 'monthly' | 'yearly';
 
   @ApiProperty({ example: '123e4567-e89b-12d3-a456-426614174001' })
   user_id: string;
@@ -33,4 +34,7 @@ export class GetBillDTO {
 
   @ApiProperty({ example: '2025-02-09T12:34:56.789Z' })
   updated_at?: Date;
+
+  @ApiProperty({ type: GetBillPaymentDTO, isArray: true })
+  bill_payments: GetBillPaymentDTO[];
 }
