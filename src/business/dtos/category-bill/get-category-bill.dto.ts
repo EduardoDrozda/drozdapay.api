@@ -20,5 +20,5 @@ export class GetCategoryBillDTO {
   created_at: Date;
 
   @ApiProperty({ example: '2025-02-09T12:34:56.789Z' })
-  updated_at: Date;
+  updated_at?: Date;
 }

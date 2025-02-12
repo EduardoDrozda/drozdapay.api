@@ -38,8 +38,8 @@ export class AuthGuard implements CanActivate {
     if (isPublic) {
       return true;
     }
-    
-    const request = context.switchToHttp().getRequest();
+
+    const request: Request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
 
     if (!token) {
@@ -50,6 +50,7 @@ export class AuthGuard implements CanActivate {
     try {
       const payload = this.authenticationService.verify(token);
       request.user = payload;
+      
       return true;
     } catch (e) {
       this.notificationService.add('Token is invalid');

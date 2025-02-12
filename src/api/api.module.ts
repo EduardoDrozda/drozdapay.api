@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { AuthController } from './controllers';
+import { AuthController, BillController } from './controllers';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import {
   BaseRequestInterceptor,
@@ -14,7 +14,7 @@ import { CategoryBillController } from './controllers/category-bill';
 
 @Module({
   imports: [UseCaseModule, InfrastructureModule],
-  controllers: [UserController, AuthController, CategoryBillController],
+  controllers: [UserController, AuthController, CategoryBillController, BillController],
   providers: [
     {
       provide: APP_INTERCEPTOR,

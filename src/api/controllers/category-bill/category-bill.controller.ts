@@ -10,7 +10,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 @Controller({ path: 'category-bills', version: '1' })
 export class CategoryBillController {
@@ -47,8 +47,7 @@ export class CategoryBillController {
   @ApiOperation({
     summary: 'Get all category bills',
   })
-  @ApiResponse({
-    status: HttpStatus.OK,
+  @ApiOkResponse({
     description: 'The category bills have been successfully retrieved',
     type: [GetCategoryBillDTO],
   })

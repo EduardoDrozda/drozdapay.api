@@ -1,4 +1,4 @@
-import { ConsoleLogger, Injectable, Logger } from '@nestjs/common';
+import { ConsoleLogger, Injectable } from '@nestjs/common';
 import { ILoggerWrapper } from './iLogger-wrapper';
 import { TraceService } from '../tracing';
 
@@ -8,9 +8,7 @@ export class LoggerWrapperService implements ILoggerWrapper {
 
   private traceId: string;
 
-  constructor(
-    private readonly trace: TraceService,
-  ) {
+  constructor(private readonly trace: TraceService) {
     this.logger = new ConsoleLogger({
       json: true,
       colors: true,

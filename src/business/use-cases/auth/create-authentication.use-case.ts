@@ -28,7 +28,9 @@ export class CreateAuthenticationUseCase {
   async execute(
     data: CreateAuthenticationDTO,
   ): Promise<GetAuthenticationDTO | void> {
-    this.logger.logInfo(`${this.constructor.name} - Executing...`);
+    this.logger.logInfo(
+      `${this.constructor.name} - Executing to email: ${data.email}`,
+    );
 
     const user = await this.userRepository.findByEmail(data.email);
 
@@ -36,14 +38,14 @@ export class CreateAuthenticationUseCase {
       !user ||
       !(await this.hashService.compare(data.password, user.password))
     ) {
-      const errorMessage = 'Email or password is incorrect';
+      const errorMessage = `${this.constructor.name} - Email or password is incorrect`;
       this.logger.logError(errorMessage);
       this.notificationService.add(errorMessage, HttpStatus.UNAUTHORIZED);
       return;
     }
 
     this.logger.logInfo(`${this.constructor.name} - Executed.`);
-    
+
     const result = await this.authService.login({
       sub: user.id,
       username: user.email,

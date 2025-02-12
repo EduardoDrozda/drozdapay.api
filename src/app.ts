@@ -60,8 +60,8 @@ export class Application {
 
   async start(): Promise<void> {
     await this.setApplication();
-    await this.setGlobalScopes();
-    await this.configSwagger();
+    this.setGlobalScopes();
+    this.configSwagger();
     const port = this.getPort();
 
     await this.app
@@ -70,7 +70,9 @@ export class Application {
         this.logger.logInfo(`${this.constructor.name} running on port ${port}`);
       })
       .catch((error) => {
-        this.logger.logError(`${this.constructor.name} Error starting: ${error}`);
+        this.logger.logError(
+          `${this.constructor.name} Error starting: ${error}`,
+        );
         process.exit(1);
       });
   }

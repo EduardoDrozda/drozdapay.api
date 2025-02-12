@@ -33,7 +33,7 @@ export class BaseResponseInterceptor implements NestInterceptor {
     next: CallHandler<any>,
   ): Observable<any> | Promise<Observable<any>> {
     const url = context.switchToHttp().getRequest().url as string;
-    const response = context.switchToHttp().getResponse() as Response;
+    const response = context.switchToHttp().getResponse();
 
     if (url.startsWith('/health')) {
       return next.handle();

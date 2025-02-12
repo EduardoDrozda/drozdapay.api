@@ -1,0 +1,23 @@
+version: '3.7'
+
+services:
+  drozdapay__db:
+    image: postgres:latest
+    container_name: drozdapay__db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: drozdapay__db
+    ports:
+      - '5432:5432'
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - drozdapay__network
+
+volumes:
+  db_data:
+
+networks:
+  drozdapay__network:
+    driver: bridge

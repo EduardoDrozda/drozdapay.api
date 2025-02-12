@@ -4,4 +4,4 @@ const app = new Application();
 
 (async () => {
   await app.start();
-})();
+})().catch(console.error);

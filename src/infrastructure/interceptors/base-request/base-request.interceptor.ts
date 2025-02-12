@@ -14,9 +14,9 @@ export class BaseRequestInterceptor implements NestInterceptor {
   constructor(private readonly traceService: TraceService) {}
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-    const req = context.switchToHttp().getRequest() as Request;
+    const req = context.switchToHttp().getRequest();
 
-    const url = req.url as string;
+    const url = req.url;
 
     if (url.startsWith('/health')) {
       return next.handle();

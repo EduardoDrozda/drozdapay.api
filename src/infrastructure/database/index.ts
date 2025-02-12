@@ -1,26 +1,25 @@
 import * as dotenv from 'dotenv';
 import { Knex, knex as setupKnex } from 'knex';
+import { knexSnakeCaseMappers } from 'objection';
 import { join } from 'path';
 
 dotenv.config();
 
 export const config: Knex.Config = {
-  client: process.env.DB_CLIENT,
+  client: process.env.DB_CONNECTION,
   connection: {
-    filename: process.env.DB_CONNECTION || 'database.sqlite',
-  },
-  pool: {
-    afterCreate: (conn, done) => {
-      conn.run("PRAGMA KEY = 'secret'");
-      done();
-    },
+    host: process.env.DB_HOST,
+    port: parseInt(process.env.DB_PORT || '5432', 10),
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
   },
   migrations: {
     directory: join(__dirname, 'migrations'),
   },
   seeds: {
     directory: join(__dirname, 'seeds'),
-  },
+  }
 };
 
 export const knex = setupKnex(config);

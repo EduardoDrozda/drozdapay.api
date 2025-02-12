@@ -8,14 +8,14 @@ import {
 
 @Catch(HttpException)
 export class RequestExceptionFilter implements ExceptionFilter {
-  catch(exception: HttpException, host: ArgumentsHost) {
+  catch(exception: any, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
     const status = exception.getStatus();
 
     const payload: IBaseResponse<string> = {
       error: true,
-      errorMessages: exception.message,
+      errorMessages: exception.getResponse().message,
       result: null,
       status,
     };
