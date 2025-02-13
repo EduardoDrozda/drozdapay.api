@@ -4,9 +4,11 @@ import { UserRepository } from './user.repository';
 import {
   BILL_REPOSITORY,
   CATEGORY_BILL_REPOSITORY,
+  USER_WALLET_REPOSITORY,
 } from '@domain/repositories';
 import { CategoryBillRepository } from './category-bill.repository';
 import { BillRepository } from './bill.repository';
+import { UserWalletRepository } from './user-wallet.repository';
 
 @Module({
   providers: [
@@ -22,7 +24,16 @@ import { BillRepository } from './bill.repository';
       provide: BILL_REPOSITORY,
       useClass: BillRepository,
     },
+    {
+      provide: USER_WALLET_REPOSITORY,
+      useClass: UserWalletRepository,
+    },
   ],
-  exports: [USER_REPOSITORY, CATEGORY_BILL_REPOSITORY, BILL_REPOSITORY],
+  exports: [
+    USER_REPOSITORY,
+    CATEGORY_BILL_REPOSITORY,
+    BILL_REPOSITORY,
+    USER_WALLET_REPOSITORY,
+  ],
 })
 export class RepositoriesModule {}

@@ -43,5 +43,13 @@ declare module 'knex/types/tables' {
       created_at: Date;
       updated_at: Date;
     };
+    user_wallets: {
+      id: string;
+      user_id: string;
+      name: string;
+      balance: number;
+      created_at: Date;
+      updated_at: Date;
+    };
   }
 }
