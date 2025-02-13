@@ -10,7 +10,7 @@ export async function up(knex: Knex): Promise<void> {
 
     table.decimal('total_value').notNullable();
 
-    table.decimal('installments').notNullable().defaultTo(1);
+    table.bigInteger('installments').notNullable().defaultTo(1);
     table.enum('installments_type', ['daily', 'weekly', 'monthly', 'yearly']).defaultTo('monthly');
 
     table.uuid('user_id').notNullable();
@@ -24,7 +24,8 @@ export async function up(knex: Knex): Promise<void> {
     table
       .foreign('category_bills_id')
       .references('id')
-      .inTable('category_bills');
+      .inTable('category_bills')
+      .onDelete('CASCADE');
 
     table.timestamps(true, true);
   });

@@ -19,3 +19,8 @@ export type BillCreateInput = Omit<
 > & {
   bill_payments: BillPaymentCreateInput[];
 }
+
+export type BillUpdateInput = Partial<BillCreateInput> & {
+  category_bills_id: string;
+  bill_payments: BillPaymentCreateInput[];
+}

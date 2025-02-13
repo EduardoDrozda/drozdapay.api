@@ -10,13 +10,13 @@ export async function up(knex: Knex): Promise<void> {
     table.string('value').notNullable();
     table.uuid('bill_id').notNullable();
     table.uuid('user_id').notNullable();
-    table.decimal('installment').notNullable().defaultTo(1);
+    table.bigint('installment').notNullable().defaultTo(1);
     table.date('payment_date');
     table.date('due_date').notNullable();
     table.timestamps(true, true);
 
-    table.foreign('bill_id').references('id').inTable('bills');
-    table.foreign('user_id').references('id').inTable('users');
+    table.foreign('bill_id').references('id').inTable('bills').onDelete('CASCADE');
+    table.foreign('user_id').references('id').inTable('users').onDelete('CASCADE');
   })
 }
 

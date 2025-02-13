@@ -31,6 +31,7 @@ export class CreateUserUseCase {
 
     if (findedUser) {
       const message = `${this.constructor.name} - 'User already exists'`;
+      this.logger.logError(message);
       this.notificationService.add(message);
 
       return;

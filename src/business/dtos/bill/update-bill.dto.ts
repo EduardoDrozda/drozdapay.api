@@ -1,27 +1,22 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
-  IsNotEmpty,
-  IsString,
-  IsNumber,
-  IsOptional,
   IsBoolean,
-  IsNumberString,
-  IsEnum,
-  IsUUID,
-  IsInt,
   IsDateString,
+  IsEnum,
+  IsInt,
+  IsNotEmpty,
+  IsNumber,
+  IsNumberString,
+  IsOptional,
+  IsString,
+  IsUUID,
 } from 'class-validator';
 
-export class CreateBillDTO {
+export class UpdateBillDTO {
   @IsNotEmpty()
   @IsString()
   @ApiProperty({ example: 'Nome da conta' })
   name: string;
-
-  @IsNotEmpty()
-  @IsString()
-  @ApiProperty({ example: 'Descrição da conta', required: false })
-  description: string;
 
   @IsNotEmpty()
   @IsNumber()
@@ -31,19 +26,13 @@ export class CreateBillDTO {
   @IsNotEmpty()
   @IsInt()
   @ApiProperty({ example: 5 })
-  @IsOptional()
-  installments: number = 1;
+  installments: number;
 
   @IsNotEmpty()
+  @IsOptional()
   @IsEnum(['daily', 'weekly', 'monthly', 'yearly'])
-  @IsOptional()
   @ApiProperty({ example: 'monthly', required: false })
-  installments_type: 'daily' | 'weekly' | 'monthly' | 'yearly' = 'monthly';
-
-  @IsBoolean()
-  @IsOptional()
-  @ApiProperty({ example: false, required: false })
-  is_paid: boolean;
+  installments_type: 'daily' | 'weekly' | 'monthly' | 'yearly';
 
   @IsNotEmpty()
   @IsUUID()
@@ -51,10 +40,20 @@ export class CreateBillDTO {
   category_bills_id: string;
 
   @IsNotEmpty()
+  @IsString()
+  @IsOptional()
+  @ApiProperty({ example: 'Descrição da conta', required: false })
+  description: string;
+
+  @IsNotEmpty()
+  @IsBoolean()
+  @IsOptional()
+  @ApiProperty({ example: false, required: false })
+  is_paid: boolean;
+
+  @IsNotEmpty()
   @IsOptional()
   @IsDateString()
   @ApiProperty({ example: '2025-04-05T03:00:00.000Z' })
   due_date?: string;
-
-  user_id: string;
 }

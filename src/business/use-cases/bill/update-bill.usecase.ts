@@ -1,5 +1,5 @@
-import { CreateBillDTO, GetBillDTO } from '@business/dtos';
-import { BillCreateInput } from '@domain/entities';
+import { GetBillDTO, UpdateBillDTO } from '@business/dtos';
+import { BillUpdateInput } from '@domain/entities';
 import { BillPaymentCreateInput } from '@domain/entities/iBill-payment.entity';
 import {
   BILL_REPOSITORY,
@@ -15,8 +15,14 @@ import {
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { DateHelper } from '@shared/helpers';
 
+interface UpdateBillUseCaseParams {
+  id: string;
+  user_id: string;
+  data: UpdateBillDTO;
+}
+
 @Injectable()
-export class CreateBillUseCase {
+export class UpdateBillUseCase {
   constructor(
     @Inject(LOGGER_SERVICE) private readonly logger: ILoggerWrapper,
     @Inject(NOTIFICATION_SERVICE)
@@ -27,47 +33,61 @@ export class CreateBillUseCase {
     private readonly categoryBillRepository: ICategoryBillRepository,
   ) {}
 
-  async execute(data: CreateBillDTO) {
+  async execute({ id, user_id, data }: UpdateBillUseCaseParams) {
     this.logger.logInfo(
-      `${this.constructor.name} - Executing to: ${JSON.stringify(data)} `,
+      `${this.constructor.name} - Executing to: ${user_id} with data: ${JSON.stringify(data)}`,
     );
 
-    const { category_bills_id } = data;
+    try {
+      const bill = await this.billRepository.findByIdAndUserId(id, user_id);
 
-    const categoryBill =
-      await this.categoryBillRepository.findById(category_bills_id);
+      if (!bill) {
+        const message = `${this.constructor.name} - Bill not found`;
+        this.logger.logError(message);
+        this.notificationService.add(message, HttpStatus.NOT_FOUND);
+        return;
+      }
 
-    if (!categoryBill) {
-      const message = `${this.constructor.name} - CategoryBill not found: ${category_bills_id}`;
+      const category = await this.categoryBillRepository.findById(
+        data.category_bills_id,
+      );
+
+      if (!category) {
+        const message = `${this.constructor.name} - Category not found`;
+        this.logger.logError(message);
+        this.notificationService.add(message, HttpStatus.NOT_FOUND);
+        return;
+      }
+
+      const billPayments = this.createBillInstallments({
+        id,
+        user_id,
+        data,
+      });
+
+      return await this.billRepository.updateByUserId(id, user_id, {
+        ...data,
+        bill_payments: billPayments,
+      });
+    } catch (error) {
+      const message = `${this.constructor.name} - Error: ${error.message}`;
       this.logger.logError(message);
-      this.notificationService.add(message, HttpStatus.BAD_REQUEST);
-      return;
+      this.notificationService.add(message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
-    const bill: BillCreateInput = {
-      name: data.name,
-      total_value: data.total_value,
-      installments: data.installments,
-      installmentsType: data.installments_type,
-      is_paid: false,
-      description: data.description,
-      user_id: data.user_id,
-      category_bills_id,
-      bill_payments: this.createBillInstallments(data),
-    };
-
-    return this.billRepository.create(bill);
   }
 
-  private createBillInstallments(
-    data: CreateBillDTO,
-  ): BillPaymentCreateInput[] {
+  private createBillInstallments({
+    id,
+    user_id,
+    data,
+  }: UpdateBillUseCaseParams): BillPaymentCreateInput[] {
     const { installments, installments_type, due_date } = data;
     const installs: BillPaymentCreateInput[] = [];
 
     const quantity_installments = installments || 1;
     const valuePerInstallment = data.total_value / quantity_installments;
     const payment_frequency = installments_type || 'monthly';
+
     let firstDueDate = new Date();
 
     if (due_date) {
@@ -80,16 +100,17 @@ export class CreateBillUseCase {
 
     for (let i = 0; i < quantity_installments; i++) {
       const installment = i + 1;
+
       const billInstallment: BillPaymentCreateInput = {
+        bill_id: id,
         installment,
-        user_id: data.user_id,
-        value: valuePerInstallment.toFixed(2),
+        user_id,
         due_date: DateHelper.addDate(
           firstDueDate,
           installment,
           payment_frequency,
         ),
-        payment_date: undefined,
+        value: valuePerInstallment.toFixed(2),
       };
 
       installs.push(billInstallment);
