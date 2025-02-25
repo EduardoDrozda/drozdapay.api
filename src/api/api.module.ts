@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import {
   AuthController,
   BillController,
@@ -44,4 +44,5 @@ import { CategoryBillController } from './controllers/category-bill';
     },
   ],
 })
-export class ApiModule {}
+export class ApiModule {
+}

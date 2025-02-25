@@ -7,7 +7,6 @@ import {
   NestInterceptor,
 } from '@nestjs/common';
 
-import { Response } from 'express';
 import { map, Observable } from 'rxjs';
 import {
   INotification,
@@ -16,7 +15,7 @@ import {
 
 export interface IBaseResponse<T> {
   error: boolean;
-  errorMessages?: Array<string> | string;
+  errorMessages?: { message: string; statusCode?: HttpStatus };
   result: T | null;
   stackTrace?: string;
   status?: HttpStatus;
@@ -26,7 +25,7 @@ export interface IBaseResponse<T> {
 export class BaseResponseInterceptor implements NestInterceptor {
   constructor(
     @Inject(NOTIFICATION_SERVICE) private readonly notification: INotification,
-  ) {}
+  ) { }
 
   intercept(
     context: ExecutionContext,
@@ -42,14 +41,15 @@ export class BaseResponseInterceptor implements NestInterceptor {
     return next.handle().pipe(
       map((data) => {
         if (this.notification.hasNotification) {
+          const notification = { ...this.notification.getMessages()! };
+          this.notification.clear();
           response.status(
-            this.notification.getMessages()?.statusCode ||
-              HttpStatus.INTERNAL_SERVER_ERROR,
+            notification.statusCode || HttpStatus.INTERNAL_SERVER_ERROR,
           );
 
           return {
             error: true,
-            errorMessages: this.notification.getMessages(),
+            errorMessages: notification,
             result: null,
           } as IBaseResponse<any>;
         }

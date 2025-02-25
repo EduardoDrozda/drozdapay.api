@@ -32,6 +32,11 @@ export class Application {
       type: VersioningType.URI,
       defaultVersion: '1',
     });
+
+    this.app.enableCors({
+      origin: '*',
+      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    });
   }
 
   private async configSwagger(): Promise<void> {

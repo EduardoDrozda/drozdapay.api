@@ -28,6 +28,11 @@ export class LoggerWrapperService implements ILoggerWrapper {
 
   private buildMessage(message: string): string {
     this.traceId = this.trace.getTraceId();
+
+    if (!this.traceId) {
+      return message;
+    }
+
     return `${this.traceId} - ${message}`;
   }
 }

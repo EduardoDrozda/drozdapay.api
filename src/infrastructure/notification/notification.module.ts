@@ -1,4 +1,4 @@
-import { Global, Module } from '@nestjs/common';
+import { Global, Module, Scope } from '@nestjs/common';
 import { NOTIFICATION_SERVICE } from './iNotification.service';
 import { NotificationService } from './notification.service';
 
@@ -7,9 +7,9 @@ import { NotificationService } from './notification.service';
   providers: [
     {
       provide: NOTIFICATION_SERVICE,
-      useClass: NotificationService,
+      useClass: NotificationService
     },
   ],
   exports: [NOTIFICATION_SERVICE],
 })
-export class NotificationModule {}
+export class NotificationModule { }

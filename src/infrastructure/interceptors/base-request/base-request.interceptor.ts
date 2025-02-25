@@ -4,18 +4,18 @@ import {
   Injectable,
   NestInterceptor,
 } from '@nestjs/common';
-import { Request } from 'express';
 import { randomUUID } from 'node:crypto';
 import { Observable } from 'rxjs';
 import { TraceService } from 'src/infrastructure/tracing';
 
 @Injectable()
 export class BaseRequestInterceptor implements NestInterceptor {
-  constructor(private readonly traceService: TraceService) {}
+  constructor(
+    private readonly traceService: TraceService
+  ) { }
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const req = context.switchToHttp().getRequest();
-
     const url = req.url;
 
     if (url.startsWith('/health')) {

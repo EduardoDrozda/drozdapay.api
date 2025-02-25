@@ -1,17 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { AsyncLocalStorage } from 'async_hooks';
-import { randomUUID } from 'node:crypto';
 
 @Injectable()
 export class TraceService {
   private storage = new AsyncLocalStorage<Map<string, string>>();
 
-  constructor() {
-    this.storage.enterWith(new Map<string, string>());
-  }
-
   getTraceId(): string {
-    return this.storage.getStore()?.get('traceId') || randomUUID();
+    return this.storage.getStore()?.get('traceId')!;
   }
 
   setTraceId(traceId: string): void {
